@@ -93,6 +93,19 @@ def load_raw_dataset(split: str = "train[:200000]") -> pd.DataFrame:
 def preprocess_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()
 
+    # Regroupement des labels 0–4 en 3 classes
+    label_map = {
+        0: "negatif",
+        1: "negatif",
+        2: "neutre",
+        3: "positif",
+        4: "positif",
+    }
+    df["sentiment"] = df["label"].map(label_map)
+    df["sentiment_id"] = df["sentiment"].map(
+        {"negatif": 0, "neutre": 1, "positif": 2}
+    )
+
     if "text" in df.columns:
         df = df.dropna(subset=["text"])
         df = df.drop_duplicates(subset="text")
