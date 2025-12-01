@@ -30,7 +30,9 @@ def download_nltk_resources() -> None:
 
 
 def get_stopwords(language: str = "french") -> set[str]:
-    return set(stopwords.words(language))
+    sw = set(stopwords.words(language))
+    keep = {"pas", "jamais", "rien", "aucun", "aucune", "plus", "sans", "ne"}
+    return sw - keep
 
 
 def get_lemmatizer() -> WordNetLemmatizer:
@@ -64,7 +66,7 @@ def clean_review(
     texte = texte.lower().strip()
     texte = texte.translate(str.maketrans("", "", string.punctuation))
     texte = unidecode(texte)  # enlever accents
-    texte = re.sub(r"\d+", "", texte)  # chiffres
+    #texte = re.sub(r"\d+", "", texte)  # chiffres
     texte = re.sub(r"€|euro|\$", "euro", texte)  # normaliser euro
     texte = re.sub(r"\s+", " ", texte)  # espaces multiples -> un seul
 
